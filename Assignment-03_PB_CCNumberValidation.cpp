@@ -9,103 +9,58 @@ bool isvalidcc(const string& s) {
 	int oddDigitSum = 0;
 	int evenDigitSum = 0;
 	
+	//check valid length.
 	if ( 13 < s.size() < 17) {
 
 
-		//sum odd digits
+		//sum odd digits with doubling .
+			//if doubling results in two digit num:
+			//add each digit for new sum --> digit = 8 --> 8 * 2 = 16 --> 1 + 6 =7
 		for (int i = s.size() - 2; i >= 0; i -= 2) {
-			int num = int(s[i]) - 48;
-			num = num * 2;
-			if (num > 9) {
-				int rhs = num % 10;
-				int lhs = (num / 10) % 10;
-				int result = rhs + lhs;
+			// .size() returns byte value of the string so -48
+			int num = int(s[i]) - 48; 
+			num = num * 2; //double the value.
+			if (num > 9) {						
+				//rhs is the reaminder of num mod 10		//ex:
+				int rhs = num % 10;				//18 % 10 = 8
+				int lhs = (num / 10) % 10;			//(18 / 10) = 1 % 10 = 1
+				int result = rhs + lhs;				// 8 + 1 = 9
 				oddDigitSum += result;
-				//cout << result << " ";
 			}
+			//avoid adding digits > 9 to oddDigitSum.
 			if(num <= 9){
 				oddDigitSum += num;
-				//cout << num << " ";
 			}
-			
 		}
 
-		//sum even digits
+		//sum even digits without doubling.
 		for (int i = s.size() - 1; i >= 0; i -= 2) {
 			int num = int(s[i]) - 48;
-			//num = num * 2;
 			if (num > 9) {
 				int rhs = num % 10;
 				int lhs = (num / 10) % 10;
 				int result = rhs + lhs;
 				evenDigitSum += result;
-				//cout << result << " ";
 			}
+			//avoid adding digits > 9 to oddDigitSum.
 			if (num <= 9) {
 				evenDigitSum += num;
-				//cout << num << " ";
 			}
-			
 		} 
 	}
 
 	int totalSum = oddDigitSum + evenDigitSum;
 	bool isDivisibleBy10 = (totalSum % 10) == 0;
-
-	//cout << "|| " << oddDigitSum << " + " << evenDigitSum << " = " << totalSum << " ||";
-
 	return isDivisibleBy10;
 }
 
-/*
-	java code translation
 
-public boolean isValidCC(String s) {
-	
-	if( s.size() > 13 && s.size < 17) {
-		int sumOdd = 0;
-		int sumEven = 0;
-
-	
-		//sum odd digits
-		for(int i = s.size() - 1; i >= 0; i -= 2) {
-			int num = s[i] * 2;
-			if(num > 9) {
-				int rhs = num % 10;
-				int lhs = num % 10;
-				int result  = rhs + lhs;
-
-				sumOdd += result;
-			}
-			sumOdd += num;
-		}
-
-		//sum even digits 
-		for(int i = s.size(); i >= 0; i -= 2) {
-			int num = s[i] * 2;
-			if(num > 9) {
-				int rhs = num % 10;
-				int lhs = num % 10;
-				int result  = rhs + lhs;
-
-				sumEven += result;
-			}
-			sumEven += num;
-		}
-
-		int totalSum = sumOdd + sumEven;
-
-		boolean isValid = (totalSum % 10 == 0) ? true : false;
-
-		return isValid
-	}
-}
-*/
-
+//fill in later
 int evenDigit() {
 	return 0;
 }
 
+//fill in later
 int oddDigit() {
 	return 0;
 }
