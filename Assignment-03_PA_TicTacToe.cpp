@@ -56,13 +56,13 @@ int main() {
 
 //displays tic tac toe board
 void displayBoard(char board[][3]) {						//	 TIC-TAC-TOE BOARD
-	cout << " " << endl;									//	-------------------
-	//rows													//	| 0,0 | 0,1 | 0,2 |
-	for (int i = 0; i < 3; i++) {							//	-------------------
-		cout << "-------------" << endl;					//	| 1,0 | 1,1 | 1,2 |
-		//columns											//	-------------------
-		for (int j = 0; j < 3; j++) {						//	| 2,0 | 2,1 | 2,2 |
-			cout << "| " << board[i][j] << " ";				//	-------------------
+	cout << " " << endl;							//	-------------------
+	//rows									//	| 0,0 | 0,1 | 0,2 |
+	for (int i = 0; i < 3; i++) {						//	-------------------
+		cout << "-------------" << endl;				//	| 1,0 | 1,1 | 1,2 |
+		//columns							//	-------------------
+		for (int j = 0; j < 3; j++) {					//	| 2,0 | 2,1 | 2,2 |
+			cout << "| " << board[i][j] << " ";			//	-------------------
 		}
 		cout << "|" << endl;
 	}
@@ -148,27 +148,6 @@ bool wonColumn(char board[][3], char player) {
 		}
 		count = 0;
 	}
-/*
-	//check column 0
-	for (int i = 0; i < 3; i++) {
-		if (board[i][0] == player) count++;
-		if (count == 3) return true;
-	}
-	count = 0;
-
-	//check column 1
-	for (int i = 0; i < 3; i++) {
-		if (board[i][1] == player) count++;
-		if (count == 3) return true;
-	}
-	count = 0;
-
-	//check column 2
-	for (int i = 0; i < 3; i++) {
-		if (board[i][2] == player) count++;
-		if (count == 3) return true;
-	}
-*/
 	return false;
 }
 
