@@ -14,20 +14,21 @@ void printData(vector<string> data) {
 void findAllDef(string line) {
     vector <string> definitions;
     string frontDelim = "> ";
-    string rearDelim = ".";
+    string rearDelim = ".|";
+    string endDelim = ".";
 
     int startIndex;
     int endIndex;
     
-    while ((endIndex = line.find(rearDelim) != string::npos)) {
+    while ((endIndex = line.find(endDelim) != string::npos)) {
         startIndex = line.find(frontDelim);
         endIndex = line.find(rearDelim);
-        if(startIndex < endIndex){
-            definitions.push_back(line.substr(startIndex + 1, endIndex - startIndex));
-            line.erase(startIndex, endIndex);
-        }
-        else
-            break;
+        
+        cout << startIndex << endl << endIndex << endl;
+
+        definitions.push_back(line.substr(startIndex + 1, endIndex - startIndex));
+        line.erase(startIndex + 1, endIndex);
+        
         
     }
     
@@ -99,29 +100,17 @@ int main()
 }
 
 
-///parsing function which looks for keyword, pos, definition
-///itterate through vector ds to find keyword, parse keyword and definition
-///placing into map
 
-///map to hold pos and defin
+	///parsing function which looks for keyword, pos, definition
+	///itterate through vector ds to find keyword, parse keyword and definition
+	///placing into map
 
+	///map to hold pos and defin
+	
 
-///output parsed data
+	///output parsed data
 
-///distinct functionality, parse user input for distinct keyword
-///use distinct unordered map for unique output of definitions
+	///distinct functionality, parse user input for distinct keyword
+	///use distinct unordered map for unique output of definitions
 
-///reverse function, reverse the vector 
-
-
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+	///reverse function, reverse the vector 
