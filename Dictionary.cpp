@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -10,43 +11,138 @@ using namespace std;
 class Dictionary {
 
 private:
+    bool validKeyword = true;
     map<string, vector<string>> keywordData;
+    vector<string> userParse;
 
 public:
 
+    void setValidKeyword(bool input) {
+        validKeyword = input;
+    }
+    bool getValidKeyword() {
+        return validKeyword;
+    }
     void setMapData(map<string, vector<string>> data) {
         keywordData = data;
     }
-
     map<string, vector<string>> getMapData() {
         return keywordData;
     }
-
-
-    void toString(string key, bool distinct, bool reverse, map<string, vector<string>> data) {
-
-
-        for (map<string, vector<string>>::const_iterator itr{ data.begin() }; itr != data.end(); ++itr) {
-            vector<string> tempVec = itr->second;
-
-            for (auto& i : tempVec) {
-                cout << key << " " << itr->first << " " << i << endl;
-            }
-            
-        } // display all pairs
-    }
-
-    /*
-    void printData(vector<string> data) {
-        for (auto& i : data) {
-            cout << i << endl;
+    
+    void setUserParse(string const &input) {
+        
+        vector<string> userParsed;
+        stringstream in(input);
+        string data;
+        size_t position = 0;
+        while (getline(in, data, ' ')) {
+            userParsed.push_back(data);
         }
-        cout << endl;
-    }
-    */
-    //vector<string> sortVec(vector<string> partOSpeech) {
+      
 
-    //}
+        userParse = userParsed;
+    }
+    
+    vector<string> getUserParse() {
+        return userParse;
+    }
+
+
+
+    //print + userValidation function
+    void toString(string in, map<string, vector<string>> data) {
+        
+        vector<string> userData = getUserParse();
+
+        string keyword, partOfSpeech;
+        bool distinct, reverse, ifValid, validPos;
+
+        vector<string> partOfSpeechVec = { "noun", "pronoun", "adjective", "determiner", "verb", "adverb", "preposition", "conjunction", "interjection" };
+
+        ifValid = getValidKeyword();
+
+        validPos = false;
+        distinct = false;
+        reverse = false;
+
+        // if our input is less than 5 slots and the keyword is valid
+        if (userData.size() < 5 && ifValid == true) {
+            
+            //if the user data is greater than 0 get the keyword if only valid keyword, then print map
+            if (userData.size() > 0) {
+                keyword = userData[0];
+                
+                if (userData.size() == 1) {
+                    for (map<string, vector<string>>::const_iterator itrer{ data.begin() }; itrer != data.end(); ++itrer) {
+                        vector<string> temp = itrer->second;
+                        for (auto& i : temp) {
+                            cout << keyword << " [" << itrer->first << "]  : " << i << endl;
+                        }
+                    } // display all pairs
+                }
+            }
+
+            //if greater than 2 we know keyword is always in 1st position, second postion can contain distinct, however we can have that as a valid POS
+            if (userData.size() >= 2) {
+                partOfSpeech = userData[1];
+
+                //check the valid inputs for pos and distinct, set flag for distinct if found in 2nd position.
+                for (int i = 0; i < partOfSpeechVec.size(); i++) {
+                    if (partOfSpeechVec[i] == partOfSpeech || partOfSpeech == "distinct") {
+                        validPos = true;
+                        if (partOfSpeech == "distinct") {
+                            distinct = true;
+                        }
+                        else {
+                            distinct = false;
+                        }
+                    }
+                }
+
+                if (validPos == true && distinct == false && reverse == false){
+                    
+                    for (auto itr = data.find(userData[1]); itr != data.end(); itr++) {
+                        if (itr->first == userData[1]) {
+                            vector<string> temp = itr->second;
+                            cout << "FOUND INFO: Key | POS |" << endl;
+                            for (auto& i : temp) {
+                                    
+                                cout << keyword << " [" << itr->first << "]  : " << i << endl;
+
+                            }
+                        }
+                    }
+                    cout << "status of distinct : " << distinct << endl;
+                }
+                
+                else if (validPos == true && distinct) {
+
+                    for (map<string, vector<string>>::const_iterator itrerer{ data.begin() }; itrerer != data.end(); ++itrerer) {
+                        map<string, string> keepTrack;
+                        
+                        vector<string> temp = itrerer->second;
+                        for (int i = 0; i < temp.size(); i++) {
+                            string tempString = temp[i];
+                            //to lower in order to make sure an capitalization conflicts on the definition are parsed out
+                            
+                            for_each (tempString.begin(), tempString.end(), [](char& c) {
+                                c = tolower(c);
+                            });
+
+                            keepTrack.emplace(tempString, itrerer->first);
+                        }
+                       
+                        for (map<string, string>::const_iterator itrererer{ keepTrack.begin() }; itrererer != keepTrack.end(); ++itrererer) {
+                            cout << keyword << " [" << itrererer->second << "]  :" << itrererer->first << endl;
+                        }
+                    }
+                }
+                cout << endl;
+            }
+        }
+
+    }
 
     void createMap(vector<string> partOfSpeech, vector<string> definition) {
         map <string, vector<string>> posDef;
@@ -82,7 +178,6 @@ public:
                     }
                 }
             }
-
             if (posDef.find(partOfSpeech[i]) == posDef.end()) {
                 posDef.emplace(partOfSpeech[i], definitionsCollection);
             }
@@ -96,7 +191,6 @@ public:
     }
 
     void findAllDef(string line) {
-
         vector<string> definitions;
         vector<string> partOSpeech;
         string frontDelim = "> ";
@@ -129,18 +223,20 @@ public:
 
             executionCount++;
         }
-
         createMap(partOSpeech, definitions);
-
-
     }
 
-    string findKey(vector<string> data, string userIn) {
+    void findKey(vector<string> data, string userIn) {
+        vector<string> parsed;
+        setValidKeyword(true);
         string key;
         string delimiterKey = "|";
-
+        bool keyFound = false;
         int pos = 0;
-
+      
+        setUserParse(userIn);
+        parsed = getUserParse();
+        
         for (auto& i : data) {
             key = i;
             pos = i.find(delimiterKey);
@@ -148,14 +244,21 @@ public:
             key = i.substr(0, pos);
             string removedKey = i.erase(0, pos + 1);
 
-            if (key == userIn) {
+            if (key == parsed[0]) {
+                keyFound = true;
                 findAllDef(removedKey);
-                return key;
+                break;
             }
-            
+
+        }
+        if (!keyFound) {
+            cout << "Sorry there is no valid keyword entered, to be considered" << endl;
+            setValidKeyword(false);
         }
     }
 
+
+    
 };
 
 int main() {
@@ -180,19 +283,28 @@ int main() {
        endl << "----- Keywords: " << endl << "----- Definitions: " << endl;
 
     while (!end) {
-        bool distinct = false;
-        bool reverse = false;
+        
+        
         cout << "enter entry: ";
-        cin >> userInput;
+        getline(cin, userInput);
+
+        //convert user input to lower
+        for_each(userInput.begin(), userInput.end(), [](char& c) {
+            c = tolower(c);
+        });
+
+
         if (userInput == "end") {
             end = true;
         }
         else {
-            string keyword = dictionary.findKey(data, userInput);
+
+            dictionary.findKey(data, userInput);
             map<string, vector<string>> keywordData = dictionary.getMapData();
-            dictionary.toString(keyword, distinct, reverse, keywordData);
+            dictionary.toString(userInput, keywordData);
         }
      }
+
      return 0;
 }
 
