@@ -156,7 +156,7 @@ public:
                     for (map<string, vector<string>>::const_iterator itr{ data.begin() }; itr != data.end(); ++itr) {
                         vector<string> temp = itr->second;
 
-                        cout << "second position size! " << itr->second.size()<< endl;
+                        
 
                         for (auto& i : temp) {
                             cout << "     " << keyword << " [" << itr->first << "]  : " << i << endl;
@@ -172,12 +172,19 @@ public:
 
                 if (userData.size() > 2 && userData.size() < 5) {
                     if (userData.size() == 3) {
-                        if (userData[2] == "reverse") {
+
+                        if (userData[1] == "reverse") {
+                            reverse = true;
+                            rFoundInPos = true;
+                        }else if (userData[2] == "reverse") {
                             reverse = true;
                         }
                         else reverse = false;
-                        
-                        if (userData[2] == "distinct") {
+
+                        if (userData[1] == "distinct") {
+                            distinct = true;
+                        }
+                        else if (userData[2] == "distinct") {
                             distinct = true;
                             flagNotPOSDistinct = true;
                         }
@@ -190,8 +197,11 @@ public:
                             flagNotPOSDistinct = true;
                         }
                         else distinct = false;
-
-                        if (userData[2] == "reverse") {
+                        if (userData[1] == "reverse") {
+                            reverse = true;
+                            rFoundInPos = true;
+                        }
+                        else if (userData[2] == "reverse") {
                             reverse = true;
                         }else if (userData[3] == "reverse"){
                             reverse = true;
@@ -261,7 +271,7 @@ public:
                                 }
                             }
                         }
-                        else {
+                        else if(reverse == true) {
                             for (auto itr = data.find(userData[1]); itr != data.end(); itr++) {
 
                                 if (itr->first == userData[1]) {
@@ -279,7 +289,7 @@ public:
                 
                 ///handling distinct + keyword via a map + reversed
                 else if (validPos == true && distinct == true) {
-                    for (map<string, vector<string>>::const_iterator itr{ data.begin() }; itr != data.end(); ++itr) {
+                     for (map<string, vector<string>>::const_iterator itr{ data.begin() }; itr != data.end(); ++itr) {
                         map<string, string> keepTrack;
                         
                         vector<string> temp = itr->second;
@@ -295,7 +305,6 @@ public:
                         }
                        
                         if (reverse == false) {
-                            
                             if (flagNotPOSDistinct) {
                                 for (map<string, string>::const_iterator itr2{ keepTrack.begin() }; itr2 != keepTrack.end(); ++itr2) {
                                     if (itr2->second == partOfSpeech) {
@@ -317,11 +326,12 @@ public:
                                         cout << "     " << keyword << " [" << itr3->second << "]  :" << itr3->first << endl;
                                     }
                                 }
-
                             }
                             else {
                                 for (map<string, string>::reverse_iterator itr3{ keepTrack.rbegin() }; itr3 != keepTrack.rend(); ++itr3) {
-                                    cout << "     " << keyword << " [" << itr3->second << "]  :" << itr3->first << endl;
+                                    
+                                        cout << "     " << keyword << " [" << itr3->second << "]  :" << itr3->first << endl;
+                                    
                                 }
                             }
                             
@@ -381,11 +391,6 @@ public:
                 posDef.emplace(partOfSpeech[i], definitionsCollection);
             }
         }
-
-        cout << " DEF SIZE : " << definition.size() << endl;
-        cout << " POS SIZE : " << partOfSpeech.size() << endl;
-
-
         setMapData(posDef);
     }
 
