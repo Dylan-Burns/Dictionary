@@ -141,6 +141,7 @@ public:
         reverse = false;
         flagNotPOSDistinct = false;
         rFoundInPos = false;
+        invalidPOS = false;
 
         // if our input is less than 5 slots and the keyword is valid
         if (userData.size() < 5 && ifValid == true) {
@@ -213,13 +214,13 @@ public:
                             else
                                 distinct = false;
                         }
-                    }
-                    else
-                        invalidPOS = true;
+                        else
+                            invalidPOS = true;
+                    }    
                 }
 
 
-                if (invalidPOS) {
+                if (invalidPOS == true) {
                     for (map<string, vector<string>>::const_iterator itr{ data.begin() }; itr != data.end(); ++itr) {
                         vector<string> temp = itr->second;
                         for (auto& i : temp) {
@@ -244,7 +245,7 @@ public:
                         }
                     }
                     else {
-                        if (rFoundInPos) {
+                        if (rFoundInPos == true) {
                             for (map<string, vector<string>>::reverse_iterator itr{ data.rbegin() }; itr != data.rend(); ++itr) {
                                 vector<string> temp = itr->second;
                                 for (auto& i : temp) {
