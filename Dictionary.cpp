@@ -143,6 +143,8 @@ public:
         rFoundInPos = false;
         invalidPOS = false;
 
+        
+
         // if our input is less than 5 slots and the keyword is valid
         if (userData.size() < 5 && ifValid == true) {
             
@@ -153,6 +155,9 @@ public:
                 if (userData.size() == 1) {
                     for (map<string, vector<string>>::const_iterator itr{ data.begin() }; itr != data.end(); ++itr) {
                         vector<string> temp = itr->second;
+
+                        cout << "second position size! " << itr->second.size()<< endl;
+
                         for (auto& i : temp) {
                             cout << "     " << keyword << " [" << itr->first << "]  : " << i << endl;
                         }
@@ -196,10 +201,9 @@ public:
 
                 //check the valid inputs for pos and distinct, set flag for distinct if found in 2nd position.
                 for (int i = 0; i < partOfSpeechVec.size(); i++) {
-                    if (partOfSpeechVec[i] == partOfSpeech || partOfSpeech == "distinct" || partOfSpeech == "reverse") {
+                    if (partOfSpeech == partOfSpeechVec[i] || partOfSpeech == "distinct" || partOfSpeech == "reverse") {
                         validPos = true;
                         if (userData.size() == 2) {
-
                             if (partOfSpeech == "reverse") {
                                 reverse = true;
                                 rFoundInPos = true;
@@ -207,17 +211,21 @@ public:
                             else
                                 reverse = false;
 
-
                             if (partOfSpeech == "distinct") {
                                 distinct = true;
                             }
                             else
                                 distinct = false;
                         }
-                        else
-                            invalidPOS = true;
-                    }    
+
+                    }
                 }
+
+                if (validPos == false && distinct == false && reverse == false) {
+                    invalidPOS = true;
+                }
+                else
+                    invalidPOS = false;
 
 
                 if (invalidPOS == true) {
@@ -231,7 +239,7 @@ public:
 
 
                 ///handling POS + keyword for 2 + reverse
-                if (validPos == true && distinct == false){
+                if (validPos && distinct == false){
                     if (reverse == false) {
                         for (auto itr = data.find(userData[1]); itr != data.end(); itr++) {
 
@@ -270,8 +278,7 @@ public:
                 }
                 
                 ///handling distinct + keyword via a map + reversed
-                else if (validPos == true && distinct) {
-
+                else if (validPos == true && distinct == true) {
                     for (map<string, vector<string>>::const_iterator itr{ data.begin() }; itr != data.end(); ++itr) {
                         map<string, string> keepTrack;
                         
@@ -374,6 +381,11 @@ public:
                 posDef.emplace(partOfSpeech[i], definitionsCollection);
             }
         }
+
+        cout << " DEF SIZE : " << definition.size() << endl;
+        cout << " POS SIZE : " << partOfSpeech.size() << endl;
+
+
         setMapData(posDef);
     }
 
