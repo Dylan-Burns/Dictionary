@@ -453,12 +453,26 @@ int main() {
     Dictionary dictionary;
     vector<string> data;
     int count = 1;
+    int delimCount = 0;
     int keyCount = 0;
     string userInput = "";
     fstream ioFile;
     bool end = false;
+    string sampleAbPath = "C:\\Users\\MickeyMouse\\AbsolutePath\\DB\\Data.CS.SFSU.txt";
+    string correctPath = "Data.CS.SFSU.txt";
 
-    ioFile.open("Data.CS.SFSU.txt", ios::in);
+    cout << "!Opening data file... " << sampleAbPath << endl;
+    ioFile.open(sampleAbPath, ios::in);
+    
+    if (ioFile.fail()) {
+        cout << "<!>ERROR<!> == = > File could not be opened." << endl;
+        cout << "<!>ERROR<!> == = > Provided file path : " << sampleAbPath << endl;
+    }
+
+    cout << "<!>Enter the CORRECT data file path: " << correctPath << endl;
+    ioFile.open(correctPath, ios::in);
+
+    cout << "! Loading data..." << endl;
 
     if (ioFile.is_open()) {
         string temp;
@@ -467,10 +481,19 @@ int main() {
             data.push_back(temp);
         }
     }
-    ioFile.close();
+    
 
-    cout << "! Loading Complete...\n" << endl << "===== DICTIONARY 340 JAVA =====" <<
-       endl << "----- Keywords: " << keyCount << endl << "----- Definitions: " << endl;
+    for (auto& i : data) {
+        for (int j = 0; (j = i.find('|', j)) != string::npos; j++) {
+            delimCount++;
+        }
+    }
+
+    cout << "! Loading Completed..." << endl << "Closing data file... " << correctPath << endl << endl;
+    
+    ioFile.close();
+        
+    cout  << "===== DICTIONARY 340 JAVA =====" << endl << "----- Keywords: " << keyCount << endl << "----- Definitions: " << delimCount << endl;
 
     while (!end) {
         
