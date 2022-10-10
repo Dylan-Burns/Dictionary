@@ -46,14 +46,91 @@ public:
         return userParse;
     }
 
+    void validateInput(vector<string> line) {
+        vector<string> validOptions = { "noun", "pronoun", "adjective", "determiner", "verb", "adverb", "preposition", "conjunction", "interjection", "distinct", "reverse"};
+        bool second = false, third = false, fourth = false;
+
+        if (line.size() > 1 && line.size() < 5) {
+            for (int i = 1; i < line.size(); i++) {
+                for (int j = 0; j < validOptions.size(); j++) {
+                    if (line[i] == validOptions[j]) {
+
+                        if (i == 1) {
+
+                            second = false;
+                        }
+                        else if (i == 2) {
+
+                            third = false;
+
+                        }
+                        else if (i == 3) {
+
+                            fourth = false;
+                        }
+                        break;
+                    }
+                    else {
+
+                        if (i == 1) {
+
+                            second = true;
+                        }
+                        else if (i == 2) {
+
+                            third = true;
+
+                        }
+                        else if (i == 3) {
+
+                            fourth = true;
+                        }
+                    }
+                }
+            }
+
+        
+            if (second == true) {
+                cout << "     <The entered 2nd parameter '" << line[1] << "' is NOT a part of speech." << endl;
+                cout << "     <The entered 2nd parameter '" << line[1] << "' is NOT 'distinct'." << endl;
+                cout << "     <The entered 2nd parameter '" << line[1] << "' is NOT 'reverse'." << endl;
+                cout << "     <The entered 2nd parameter '" << line[1] << "' was disregarded." << endl;
+                cout << "     <The 2nd parameter should be a part of speech or 'distinct' or 'reverse'.>" << endl;
+                cout << "    |" << endl;
+            }
+
+            if (third == true) {
+                cout << "     <The entered 3rd parameter '" << line[2] << "' is NOT 'distinct'." << endl;
+                cout << "     <The entered 3rd parameter '" << line[2] << "' is NOT 'reverse'." << endl;
+                cout << "     <The entered 3rd parameter '" << line[2] << "' was disregarded." << endl;
+                cout << "     <The 3rd parameter should be 'distinct' or 'reverse'.>" << endl;
+                cout << "    |" << endl;
+            }
+
+            if (fourth == true) {
+                cout << "     <The entered 4th parameter '" << line[3] << "' is NOT 'reverse'." << endl;
+                cout << "     <The entered 4th parameter '" << line[3] << "' was disregarded." << endl;
+                cout << "     <The 4th parameter should be 'reverse'.>" << endl;
+                cout << "    |" << endl;
+            }
+            
+        }
+        else {
+            cout << "     PARAMETER HOW-TO, please enter:" << endl;
+            cout << "     1. A search key - then 2. An optional part of speech - then" << endl
+                << "     3. An optional 'distinct' -then 4. An optional 'reverse'" << endl;
+        }
+
+    }
 
     //print + userValidation function
     void toString(string in, map<string, vector<string>> data) {
         
         vector<string> userData = getUserParse();
-
+        validateInput(userData);
+        
         string keyword, partOfSpeech;
-        bool distinct, reverse, ifValid, validPos, flagNotPOSDistinct, rFoundInPos;
+        bool distinct, reverse, ifValid, validPos, flagNotPOSDistinct, rFoundInPos, invalidPOS;
 
         vector<string> partOfSpeechVec = { "noun", "pronoun", "adjective", "determiner", "verb", "adverb", "preposition", "conjunction", "interjection" };
 
@@ -137,7 +214,20 @@ public:
                                 distinct = false;
                         }
                     }
+                    else
+                        invalidPOS = true;
                 }
+
+
+                if (invalidPOS) {
+                    for (map<string, vector<string>>::const_iterator itr{ data.begin() }; itr != data.end(); ++itr) {
+                        vector<string> temp = itr->second;
+                        for (auto& i : temp) {
+                            cout << "     " << keyword << " [" << itr->first << "]  : " << i << endl;
+                        }
+                    }
+                }
+
 
                 ///handling POS + keyword for 2 + reverse
                 if (validPos == true && distinct == false){
@@ -297,7 +387,6 @@ public:
 
         int startIndex;
         int endIndex;
-        int speechStartIndex;
         int speechEndIndex;
         int executionCount = 0;
 
@@ -378,6 +467,7 @@ int main() {
             data.push_back(temp);
         }
     }
+    ioFile.close();
 
     cout << "! Loading Complete...\n" << endl << "===== DICTIONARY 340 JAVA =====" <<
        endl << "----- Keywords: " << keyCount << endl << "----- Definitions: " << endl;
