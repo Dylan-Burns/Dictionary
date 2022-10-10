@@ -492,7 +492,7 @@ int main() {
     
     ioFile.close();
         
-    cout  << "===== DICTIONARY 340 C++ =====" << endl << "----- Keywords: " << keyCount << endl << "----- Definitions: " << delimCount << endl;
+    cout << "===== DICTIONARY 340 C++ =====" << endl << "----- Keywords: " << keyCount << endl << "----- Definitions: " << delimCount << endl << endl;
 
     while (!end) {
         
