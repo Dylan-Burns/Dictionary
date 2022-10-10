@@ -115,7 +115,7 @@ public:
             }
             
         }
-        else {
+        else if (line.size() > 1) {
             cout << "     PARAMETER HOW-TO, please enter:" << endl;
             cout << "     1. A search key - then 2. An optional part of speech - then" << endl
                 << "     3. An optional 'distinct' -then 4. An optional 'reverse'" << endl;
@@ -497,7 +497,7 @@ int main() {
     while (!end) {
         
         
-        cout << "Search["<< count << "]: ";
+        cout << "Search ["<< count << "]: ";
         getline(cin, userInput);
         
         
