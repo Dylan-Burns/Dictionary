@@ -482,7 +482,6 @@ int main() {
         }
     }
     
-
     for (auto& i : data) {
         for (int j = 0; (j = i.find('|', j)) != string::npos; j++) {
             delimCount++;
@@ -493,7 +492,7 @@ int main() {
     
     ioFile.close();
         
-    cout  << "===== DICTIONARY 340 JAVA =====" << endl << "----- Keywords: " << keyCount << endl << "----- Definitions: " << delimCount << endl;
+    cout  << "===== DICTIONARY 340 C++ =====" << endl << "----- Keywords: " << keyCount << endl << "----- Definitions: " << delimCount << endl;
 
     while (!end) {
         
